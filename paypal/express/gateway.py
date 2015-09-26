@@ -268,7 +268,7 @@ def set_txn(basket, shipping_methods, currency, return_url, cancel_url, update_u
     if user:
         params['EMAIL'] = user.email
     if user_address:
-        params['SHIPTONAME'] = user_address.name
+        params['SHIPTONAME'] = user_address.salutation
         params['SHIPTOSTREET'] = user_address.line1
         params['SHIPTOSTREET2'] = user_address.line2
         params['SHIPTOCITY'] = user_address.line4
@@ -283,7 +283,7 @@ def set_txn(basket, shipping_methods, currency, return_url, cancel_url, update_u
         # It's recommend not to set 'confirmed shipping' if supplying the
         # shipping address directly.
         params['REQCONFIRMSHIPPING'] = 0
-        params['SHIPTONAME'] = shipping_address.name
+        params['SHIPTONAME'] = shipping_address.salutation
         params['SHIPTOSTREET'] = shipping_address.line1
         params['SHIPTOSTREET2'] = shipping_address.line2
         params['SHIPTOCITY'] = shipping_address.line4
