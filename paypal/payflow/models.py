@@ -1,16 +1,13 @@
-from __future__ import unicode_literals
 import re
 
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import ugettext
+from django.utils.translation import gettext
+from django.utils.translation import gettext_lazy as _
 
-from paypal.payflow import codes
 from paypal import base
+from paypal.payflow import codes
 
 
-@python_2_unicode_compatible
 class PayflowTransaction(base.ResponseModel):
     # This is the linking parameter between the merchant and PayPal.  It is
     # normally set to the order number
@@ -24,9 +21,9 @@ class PayflowTransaction(base.ResponseModel):
 
     # Response params
     pnref = models.CharField(_("Payflow transaction ID"), max_length=32,
-                             null=True)
-    ppref = models.CharField(_("Payment transaction ID"), max_length=32,
                              unique=True, null=True)
+    ppref = models.CharField(_("Payment transaction ID"), max_length=32,
+                             null=True)
     result = models.CharField(max_length=32, null=True, blank=True)
     respmsg = models.CharField(_("Response message"), max_length=512)
     authcode = models.CharField(_("Auth code"), max_length=32, null=True,
@@ -37,8 +34,7 @@ class PayflowTransaction(base.ResponseModel):
                                  max_length=12)
     avsaddr = models.CharField(_("House number check"), null=True, blank=True,
                                max_length=1)
-    avszip = models.CharField(_("Zip/Postcode check"), null=True, blank=True,
-                               max_length=1)
+    avszip = models.CharField(_("Zip/Postcode check"), null=True, blank=True, max_length=1)
 
     class Meta:
         ordering = ('-date_created',)
@@ -51,11 +47,11 @@ class PayflowTransaction(base.ResponseModel):
         return super(PayflowTransaction, self).save(*args, **kwargs)
 
     def get_trxtype_display(self):
-        return ugettext(codes.trxtype_map.get(self.trxtype, self.trxtype))
+        return gettext(codes.trxtype_map.get(self.trxtype, self.trxtype))
     get_trxtype_display.short_description = _("Transaction type")
 
     def get_tender_display(self):
-        return ugettext(codes.tender_map.get(self.tender, ''))
+        return gettext(codes.tender_map.get(self.tender, ''))
     get_tender_display.short_description = _("Tender")
 
     @property

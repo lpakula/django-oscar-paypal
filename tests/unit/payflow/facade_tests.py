@@ -1,18 +1,12 @@
-from __future__ import unicode_literals
-from decimal import Decimal as D
 import datetime
+from decimal import Decimal as D
+from unittest import mock
 
 from django.test import TestCase
-from django.utils import six
-from oscar.apps.payment.models import Bankcard
 from oscar.apps.payment import exceptions
-import mock
+from oscar.apps.payment.models import Bankcard
 
-from paypal.payflow import facade, models, codes
-
-"""
-See page 49 of the PDF for information on PayPal's testing set-up
-"""
+from paypal.payflow import codes, facade, models
 
 
 class TestAuthorize(TestCase):
@@ -52,7 +46,7 @@ class TestAuthorize(TestCase):
             try:
                 self.authorize()
             except exceptions.UnableToTakePayment as e:
-                self.assertEqual("Invalid account number", six.text_type(e))
+                self.assertEqual("Invalid account number", str(e))
 
 
 class TestSale(TestCase):
