@@ -26,7 +26,7 @@ seller.  Once the seller is created, you will have access to a
 username, password and 'signature' which are used to authenticate API
 requests.
 
-Add the following settings using the details from your sandbox buyer account::
+Add the following settings using the details from your sandbox seller account::
 
     PAYPAL_API_USERNAME = 'test_xxxx.gmail.com'
     PAYPAL_API_PASSWORD = '123456789'
@@ -36,21 +36,25 @@ Next, you need to add the PayPal URLs to your URL config.  This can be done as
 follows::
 
     from django.contrib import admin
+    from django.urls import include, path
+
     from oscar.app import shop
-
-    from paypal.express.dashboard.app import application
-
-    urlpatterns = patterns('',
-        (r'^admin/', include(admin.site.urls)),
-        (r'^checkout/paypal/', include('paypal.express.urls')),
+    
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('checkout/paypal/', include('paypal.express.urls')),
         # Optional
-        (r'^dashboard/paypal/express/', include(application.urls)),
-        (r'', include(shop.urls)),
+        path('dashboard/paypal/express/', apps.get_app_config("express_dashboard").urls),
+        path('', shop.urls),
+    ]
 
 If you are using the dashboard views, extend the dashboard navigation to include
-the appropriate links::
-
-    from django.utils.translation import ugettext_lazy as _
+the appropriate links and add the dashboard app to INSTALLED_APPS in settings.py:: 
+    
+    INSTALLED_APPS += ['paypal.express.dashboard.apps.ExpressDashboardApplication']
+    
+    # Add Payflow dashboard stuff to settings
+    from django.utils.translation import gettext_lazy as _
     OSCAR_DASHBOARD_NAVIGATION.append(
         {
             'label': _('PayPal'),
@@ -58,7 +62,7 @@ the appropriate links::
             'children': [
                 {
                     'label': _('Express transactions'),
-                    'url_name': 'paypal-express-list',
+                    'url_name': 'express_dashboard:paypal-express-list',
                 },
             ]
         })
@@ -69,7 +73,6 @@ links to PayPal.  This can be done by creating a new template
 
     {% extends 'oscar/basket/partials/basket_content.html' %}
     {% load i18n %}
-    {% load url from future %}
 
     {% block formactions %}
     <div class="form-actions">
@@ -124,6 +127,8 @@ settings.
 * ``PAYPAL_PAGESTYLE`` - name of the Custom Payment Page Style for payment pages
   associated with this button or link
 * ``PAYPAL_PAYFLOW_COLOR`` - background color (6-char hex value) for the payment page
+* ``PAYPAL_BUYER_PAYS_ON_PAYPAL`` - If ``True`` you can shorten your checkout flow to
+  let buyers complete their purchases on PayPal. The order confirmation page is skipped (defaults to ``False``)
 
 
 Some of these options, like the display ones, can be set in your PayPal merchant

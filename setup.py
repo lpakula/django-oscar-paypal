@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 from paypal import VERSION
-
 
 setup(
     name='django-oscar-paypal',
@@ -13,15 +12,18 @@ setup(
         "Payments for django-oscar"),
     long_description=open('README.rst').read(),
     keywords="Payment, PayPal, Oscar",
-    license=open('LICENSE').read(),
+    license='BSD',
     platforms=['linux'],
     packages=find_packages(exclude=['sandbox*', 'tests*']),
     include_package_data=True,
     install_requires=[
+        'django>=2.2,<3.2',
+        'paypal-checkout-serversdk>=1.0.1',
         'requests>=1.0',
-        'django-localflavor'],
+        'django-localflavor'
+    ],
     extras_require={
-        'oscar': ["django-oscar>=1.0"]
+        'oscar': ['django-oscar>=2.0,<3.0']
     },
     # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -32,10 +34,10 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: Unix',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Topic :: Other/Nonlisted Topic'],
 )

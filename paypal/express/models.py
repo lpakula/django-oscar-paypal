@@ -1,13 +1,10 @@
-from __future__ import unicode_literals
 import re
 
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 
 from paypal import base
 
 
-@python_2_unicode_compatible
 class ExpressTransaction(base.ResponseModel):
 
     # The PayPal method and version used
@@ -44,4 +41,3 @@ class ExpressTransaction(base.ResponseModel):
     def __str__(self):
         return 'method: %s: token: %s' % (
             self.method, self.token)
-
